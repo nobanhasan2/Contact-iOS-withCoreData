@@ -1,0 +1,22 @@
+PODS:
+  - BulletinBoard (4.1.0)
+  - SwiftMessages (7.0.1):
+    - SwiftMessages/App (= 7.0.1)
+  - SwiftMessages/App (7.0.1)
+
+DEPENDENCIES:
+  - BulletinBoard
+  - SwiftMessages
+
+SPEC REPOS:
+  trunk:
+    - BulletinBoard
+    - SwiftMessages
+
+SPEC CHECKSUMS:
+  BulletinBoard: c774340545b5cfd05a96a89f63b105ecc95c86f9
+  SwiftMessages: b577dc7043be8b299857ab35bb663dbff6483bd0
+
+PODFILE CHECKSUM: ddfb8a0b4e8662ac46b602cd971674141861536c
+
+COCOAPODS: 1.8.4
