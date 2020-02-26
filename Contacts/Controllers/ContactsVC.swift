@@ -410,6 +410,7 @@ extension ContactsVC: UITableViewDataSource, UITableViewDelegate {
         var phoneNumbers = NSObject()
         var emails = NSObject()
         var addresses = NSObject()
+        var fields = NSObject()
         var contactImage = UIImage()
         var favorite = Bool()
         
@@ -439,6 +440,7 @@ extension ContactsVC: UITableViewDataSource, UITableViewDelegate {
             phoneNumbers = filteredPersonArray[rowNumber].phoneNumbers!
             emails = filteredPersonArray[rowNumber].emails!
             addresses = filteredPersonArray[rowNumber].addresses!
+            fields = filteredPersonArray[rowNumber].fields!
             contactImage = contactImagesDictionary[fullName]!
             favorite = contactFavoritesDictionary[fullName]!
         } else {
@@ -448,6 +450,7 @@ extension ContactsVC: UITableViewDataSource, UITableViewDelegate {
             phoneNumbers = personArray[rowNumber].phoneNumbers!
             emails = personArray[rowNumber].emails!
             addresses = personArray[rowNumber].addresses!
+            fields = personArray[rowNumber].fields!
             contactImage = contactImagesDictionary[fullName]!
             favorite = contactFavoritesDictionary[fullName]!
         }
@@ -459,7 +462,7 @@ extension ContactsVC: UITableViewDataSource, UITableViewDelegate {
         }
         
         let profileVC = self.storyboard?.instantiateViewController(withIdentifier: "ProfileVC") as! ProfileVC
-        profileVC.initProfileView(firstName: firstName, lastName: lastName, dateOfBirth: dateOfBirth, profileImage: contactImage, phoneNumbers: phoneNumbers as! [String], emails: emails as! [String], addresses: addresses as! [String], profileType: .view, isFavorite: isFavorite)
+        profileVC.initProfileView(firstName: firstName, lastName: lastName, dateOfBirth: dateOfBirth, profileImage: contactImage, phoneNumbers: phoneNumbers as! [String], emails: emails as! [String], addresses: addresses as! [String],fields: fields as! [String], profileType: .view, isFavorite: isFavorite)
         
         present(profileVC, animated: true, completion: nil)
     }

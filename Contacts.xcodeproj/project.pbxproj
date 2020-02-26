@@ -8,6 +8,10 @@
 
 /* Begin PBXBuildFile section */
 		52DA79C0E3A347B915DB8EEB /* Pods_Contacts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7DA715FC105ED13A55ED854D /* Pods_Contacts.framework */; };
+		908CE1C424062B3900E8BE32 /* NewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 908CE1C324062B3900E8BE32 /* NewViewController.swift */; };
+		908D9C9524023FD70060174A /* CustomFieldTextFieldBulletinItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 908D9C9424023FD70060174A /* CustomFieldTextFieldBulletinItem.swift */; };
+		9091B6C6240388BF004A3C58 /* FieldsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9091B6C5240388BF004A3C58 /* FieldsModel.swift */; };
+		90A7AF42240297AC00B7BAA8 /* ExportViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90A7AF41240297AC00B7BAA8 /* ExportViewController.swift */; };
 		FE11886F21D6A2C2004B8CA6 /* PhoneNumberTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE11886E21D6A2C2004B8CA6 /* PhoneNumberTests.swift */; };
 		FE11887721D6A304004B8CA6 /* EmailTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE11887621D6A304004B8CA6 /* EmailTests.swift */; };
 		FE11887921D6ADE8004B8CA6 /* StringExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE11887821D6ADE8004B8CA6 /* StringExtension.swift */; };
@@ -56,6 +60,10 @@
 /* Begin PBXFileReference section */
 		31D2E602750EE12B5F71E140 /* Pods-Contacts.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Contacts.release.xcconfig"; path = "Pods/Target Support Files/Pods-Contacts/Pods-Contacts.release.xcconfig"; sourceTree = "<group>"; };
 		7DA715FC105ED13A55ED854D /* Pods_Contacts.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Contacts.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		908CE1C324062B3900E8BE32 /* NewViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewViewController.swift; sourceTree = "<group>"; };
+		908D9C9424023FD70060174A /* CustomFieldTextFieldBulletinItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomFieldTextFieldBulletinItem.swift; sourceTree = "<group>"; };
+		9091B6C5240388BF004A3C58 /* FieldsModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FieldsModel.swift; sourceTree = "<group>"; };
+		90A7AF41240297AC00B7BAA8 /* ExportViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExportViewController.swift; sourceTree = "<group>"; };
 		DDCDA387B91B9C6963CD66B5 /* Pods-Contacts.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Contacts.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Contacts/Pods-Contacts.debug.xcconfig"; sourceTree = "<group>"; };
 		FE11886C21D6A2C2004B8CA6 /* ContactsTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ContactsTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		FE11886E21D6A2C2004B8CA6 /* PhoneNumberTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhoneNumberTests.swift; sourceTree = "<group>"; };
@@ -123,6 +131,14 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		9091B6C424038865004A3C58 /* fieldsModel */ = {
+			isa = PBXGroup;
+			children = (
+				9091B6C5240388BF004A3C58 /* FieldsModel.swift */,
+			);
+			path = fieldsModel;
+			sourceTree = "<group>";
+		};
 		E32E1C5CA22556CA83854FCB /* Pods */ = {
 			isa = PBXGroup;
 			children = (
@@ -151,6 +167,7 @@
 				FE17704A21D4036E00F7F0BE /* PhoneTextFieldBulletinItem.swift */,
 				FE17704C21D404B100F7F0BE /* EmailTextFieldBulletinItem.swift */,
 				FE17704621D3FCFE00F7F0BE /* AddressTextFieldBulletinItem.swift */,
+				908D9C9424023FD70060174A /* CustomFieldTextFieldBulletinItem.swift */,
 			);
 			path = Boards;
 			sourceTree = "<group>";
@@ -160,6 +177,8 @@
 			children = (
 				FEA6A3DE21C9A1F6006410C7 /* ContactsVC.swift */,
 				FEA6A3F721CA5BE5006410C7 /* ProfileVC.swift */,
+				90A7AF41240297AC00B7BAA8 /* ExportViewController.swift */,
+				908CE1C324062B3900E8BE32 /* NewViewController.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -240,6 +259,7 @@
 		FEA6A3DB21C9A1F6006410C7 /* Contacts */ = {
 			isa = PBXGroup;
 			children = (
+				9091B6C424038865004A3C58 /* fieldsModel */,
 				FE9E0AFC21D06B7B00B39060 /* JsonAnimations */,
 				FE17704321D3FB1700F7F0BE /* Boards */,
 				FE9E0AF621D06B2D00B39060 /* Enums */,
@@ -422,12 +442,16 @@
 				FE57A5DF21CEE8A000F22572 /* CustomImageView.swift in Sources */,
 				FE9E0AEF21D00A4F00B39060 /* GradientView.swift in Sources */,
 				FEA6A3DF21C9A1F6006410C7 /* ContactsVC.swift in Sources */,
+				908CE1C424062B3900E8BE32 /* NewViewController.swift in Sources */,
 				FE17704721D3FCFE00F7F0BE /* AddressTextFieldBulletinItem.swift in Sources */,
 				FEA6A3F821CA5BE5006410C7 /* ProfileVC.swift in Sources */,
 				FE9E0AED21D0057C00B39060 /* CustomUIView.swift in Sources */,
 				FEF9882921D11E150095F28A /* SortOrderEnum.swift in Sources */,
+				908D9C9524023FD70060174A /* CustomFieldTextFieldBulletinItem.swift in Sources */,
+				90A7AF42240297AC00B7BAA8 /* ExportViewController.swift in Sources */,
 				FEA6A3DD21C9A1F6006410C7 /* AppDelegate.swift in Sources */,
 				FE57A5DD21CEE83100F22572 /* CustomButton.swift in Sources */,
+				9091B6C6240388BF004A3C58 /* FieldsModel.swift in Sources */,
 				FEA6A3E521C9A1F6006410C7 /* Contacts.xcdatamodeld in Sources */,
 				FEF9882B21D11EB40095F28A /* IsFavoriteEnum.swift in Sources */,
 				FE17704B21D4036E00F7F0BE /* PhoneTextFieldBulletinItem.swift in Sources */,

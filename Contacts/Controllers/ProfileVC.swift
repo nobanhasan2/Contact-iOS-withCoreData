@@ -5,7 +5,6 @@
 //  Created by Johnny Perdomo on 12/19/18.
 //  Copyright © 2018 Johnny Perdomo. All rights reserved.
 //
-
 import UIKit
 import CoreData
 import MessageUI
@@ -37,14 +36,22 @@ class ProfileVC: UIViewController {
     private var lastNameString = String()
     private var dateOfBirthString = String()
     private var profileImage = UIImage()
+    private var fieldString = String()
+    private var fieldList : [FieldModel] = []
+    
     
     private var phoneNumberArray = [String]()
     private var emailArray = [String]()
     private var addressArray = [String]()
     
+    private var fieldsArray = [String]()
+    
     private var datePicker = UIDatePicker()
     
-    private var userDataArray: [Int : [String]] = [0: [], 1: [], 2: []] //to store user data -> 0: phone, 1: email, 2: address
+    let xPos : CGFloat = 0
+    var yPos : CGFloat = 0
+    
+    private var userDataArray: [Int : [String]] = [0: [], 1: [], 2: [], 3: []] //to store user data -> 0: phone, 1: email, 2: address
     
     private var profileType: ProfileTypeEnum!
     private var isFavorite: IsFavoriteEnum!
@@ -143,6 +150,40 @@ class ProfileVC: UIViewController {
         return BLTNItemManager(rootItem: item)
     }()
     
+    lazy var customField: BLTNItemManager = {
+        
+        let page = CustomFieldTextFieldBulletinItem(title: "Field")
+        page.descriptionText = "Enter a field value"
+        page.actionButtonTitle = "Enter"
+        page.alternativeButtonTitle = "Close"
+        
+       
+        page.actionHandler = { (item: BLTNActionItem) in
+            let field =  FieldModel(name: page.textField.text!,value: page.textField2.text!)
+            do{
+                let jsonEncoder = JSONEncoder()
+                let jsonData = try jsonEncoder.encode(field)
+                let json = String(data: jsonData, encoding: String.Encoding.utf8)
+                self.appendUserData(text: json!, section: self.userDataButtonInfo.tag)
+            }
+            catch let error as NSError
+            {
+                print(error.localizedDescription)
+            }
+
+          
+            self.dismissCustomBoard()
+        }
+        
+        page.alternativeHandler = { (item: BLTNActionItem) in
+        self.dismissCustomBoard()        }
+        
+        let item: BLTNItem = page
+        item.isDismissable = true
+        item.requiresCloseButton = false
+        return BLTNItemManager(rootItem: item)
+    }()
+    
     
     lazy var datePickerBulletin: BLTNItemManager = {
         
@@ -198,7 +239,7 @@ class ProfileVC: UIViewController {
             
             if firstNameTxtField.text != "" && lastNameTxtField.text != "" && dateOfBirthTextField.text != "" && (userDataArray[0]?.count)! >= 1 && (userDataArray[1]?.count)! >= 1 {
                 
-                saveProfile(firstName: (firstNameTxtField.text?.capitalized)!, lastName: (lastNameTxtField.text?.capitalized)!, dateOfBirth: dateOfBirthTextField.text!, phoneNumbers: userDataArray[0]!, emails: userDataArray[1]!, addresses: userDataArray[2]!, profileImage: profileImg.image!, isFavoritePerson: isFavorite) { (complete) in
+                saveProfile(firstName: (firstNameTxtField.text?.capitalized)!, lastName: (lastNameTxtField.text?.capitalized)!, dateOfBirth: dateOfBirthTextField.text!, phoneNumbers: userDataArray[0]!, emails: userDataArray[1]!, addresses: userDataArray[2]!,fields: userDataArray[3]!, profileImage: profileImg.image!, isFavoritePerson: isFavorite) { (complete) in
                     
                     if complete {
                         guard let contactsVC = storyboard?.instantiateViewController(withIdentifier: "ContactsVC") else { return }
@@ -224,7 +265,7 @@ class ProfileVC: UIViewController {
             
             if firstNameTxtField.text != "" && lastNameTxtField.text != "" && dateOfBirthTextField.text != "" && (userDataArray[0]?.count)! >= 1 && (userDataArray[1]?.count)! >= 1 {
             
-                modifyProfileInfo(searchFirstName: firstNameString, searchLastName: lastNameString, searchDateOfBirth: dateOfBirthString, newFirstName: firstNameTxtField.text!, newLastName: lastNameTxtField.text!, newDateOfBirth: dateOfBirthTextField.text!, newProfileImage: profileImg.image!, newPhonenumbers: userDataArray[0]!, newEmails: userDataArray[1]!, newAddresses: userDataArray[2]!, newIsFavoritePerson: isFavoriteBool ) { (complete) in
+                modifyProfileInfo(searchFirstName: firstNameString, searchLastName: lastNameString, searchDateOfBirth: dateOfBirthString, newFirstName: firstNameTxtField.text!, newLastName: lastNameTxtField.text!, newDateOfBirth: dateOfBirthTextField.text!, newProfileImage: profileImg.image!, newPhonenumbers: userDataArray[0]!, newEmails: userDataArray[1]!, newAddresses: userDataArray[2]!, newIsFavoritePerson: isFavoriteBool ,fields: userDataArray[3]!) { (complete) in
                 
                     if complete {
                         guard let contactsVC = storyboard?.instantiateViewController(withIdentifier: "ContactsVC") else { return }
@@ -348,11 +389,39 @@ class ProfileVC: UIViewController {
     
     //MARK: VC Functions -----------------------------------------------------------------------------
     
-    func initProfileView(firstName: String = "", lastName: String = "", dateOfBirth: String = "", profileImage: UIImage = UIImage(named: "personPlaceholder")!, phoneNumbers: [String] = [], emails: [String] = [], addresses: [String] = [], profileType: ProfileTypeEnum, isFavorite: IsFavoriteEnum = .no) {
+    func initProfileView(firstName: String = "", lastName: String = "", dateOfBirth: String = "", profileImage: UIImage = UIImage(named: "personPlaceholder")!, phoneNumbers: [String] = [], emails: [String] = [], addresses: [String] = [],fields: [String] = [], profileType: ProfileTypeEnum, isFavorite: IsFavoriteEnum = .no) {
         
         userDataArray[0] = phoneNumbers
         userDataArray[1] = emails
         userDataArray[2] = addresses
+        userDataArray[3] = fields
+        
+        for item in userDataArray[3]! {
+           let somedata = Data(item.utf8)
+           let jsonDecoder = JSONDecoder()
+            do{
+                print(somedata)
+                    let field = try jsonDecoder.decode(FieldModel.self, from: somedata)
+                fieldList.append(field)
+            }catch let jsonErr {
+                print(jsonErr)
+            }
+         
+        }
+        for item in fieldList{
+            yPos += 22
+            let tf = UITextField()
+            tf.text = item.fieldName
+            tf.textColor = UIColor.white
+            tf.frame = CGRect(x: xPos, y: yPos, width: 100, height: 20)
+            tf.backgroundColor = UIColor.black
+            self.view.addSubview(tf)
+        }
+        print("List Size" + "\(fieldList[0].fieldName)")
+        
+        //  let jsonDecoder = JSONDecoder()
+        //  self.fieldList = try jsonDecoder.decode(FieldModel.self, from: userDataArray[3])
+        print(userDataArray[3])
         
         self.profileType = profileType
         self.isFavorite = isFavorite
@@ -477,6 +546,9 @@ class ProfileVC: UIViewController {
         } else if button.tag == 2 {
             addressBulletin.showBulletin(above: self)
         }
+        else if button.tag == 3{
+            customField.showBulletin(above: self)
+        }
     }
     
     private func addFavoritePerson(isFavoritePerson: IsFavoriteEnum) {
@@ -583,13 +655,17 @@ extension ProfileVC {
     private func dismissAddressBoard() {
         addressBulletin.dismissBulletin()
     }
+    
+    private func dismissCustomBoard() {
+        customField.dismissBulletin()
+    }
 }
 
 //MARK: Coredata ----------------------------------------------------------------------------
 
 extension ProfileVC {
     
-    private func saveProfile(firstName: String, lastName: String, dateOfBirth: String, phoneNumbers: [String], emails: [String], addresses: [String], profileImage: UIImage, isFavoritePerson: IsFavoriteEnum, completion: (_ complete: Bool) -> ()) {
+    private func saveProfile(firstName: String, lastName: String, dateOfBirth: String, phoneNumbers: [String], emails: [String], addresses: [String],fields: [String], profileImage: UIImage, isFavoritePerson: IsFavoriteEnum, completion: (_ complete: Bool) -> ()) {
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
         
         let managedContext = appDelegate.persistentContainer.viewContext
@@ -612,6 +688,7 @@ extension ProfileVC {
         person.phoneNumbers = phoneNumbers as NSObject
         person.emails = emails as NSObject
         person.addresses = addresses as NSObject
+        person.fields = fields as NSObject
         person.isFavorite = isFavoriteBool
         
         do {
@@ -624,7 +701,7 @@ extension ProfileVC {
         }
     }
     
-    private func modifyProfileInfo(searchFirstName: String, searchLastName: String, searchDateOfBirth: String, newFirstName: String, newLastName: String, newDateOfBirth: String, newProfileImage: UIImage, newPhonenumbers: [String], newEmails: [String], newAddresses: [String], newIsFavoritePerson: Bool,  completion: (_ complete: Bool) -> ()) {
+    private func modifyProfileInfo(searchFirstName: String, searchLastName: String, searchDateOfBirth: String, newFirstName: String, newLastName: String, newDateOfBirth: String, newProfileImage: UIImage, newPhonenumbers: [String], newEmails: [String], newAddresses: [String], newIsFavoritePerson: Bool,fields: [String],  completion: (_ complete: Bool) -> ()) {
         
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
         let managedContext = appDelegate.persistentContainer.viewContext
@@ -649,6 +726,7 @@ extension ProfileVC {
                             result.setValue(newPhonenumbers, forKey: "phoneNumbers")
                             result.setValue(newEmails, forKey: "emails")
                             result.setValue(newAddresses, forKey: "addresses")
+                            result.setValue(fields, forKey: "fields")
                             result.setValue(newIsFavoritePerson, forKey: "isFavorite")
                             
                             do {
@@ -714,7 +792,7 @@ extension ProfileVC: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let header = Bundle.main.loadNibNamed("SectionHeaderView", owner: self, options: nil)?.first as! SectionHeaderView
         
-        let sectionName = section == 0 ? "Phone Number" : section == 1 ? "Email" : "Address"
+        let sectionName = section == 0 ? "Phone Number" : section == 1 ? "Email" : section == 2 ? "Address" : "fields"
         
         header.sectionTitleLabel.text = sectionName
         header.addButton.addTarget(self, action: #selector(addUserDataText), for: .touchUpInside)

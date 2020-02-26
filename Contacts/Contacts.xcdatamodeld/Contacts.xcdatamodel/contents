@@ -1,23 +1,22 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="15508" systemVersion="19C57" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
-    <entity name="Field" representedClassName="Field" syncable="YES" codeGenerationType="class">
-        <attribute name="name" optional="YES" attributeType="String"/>
+    <entity name="Field" representedClassName="field" syncable="YES" codeGenerationType="class">
+        <attribute name="fieldName" optional="YES" attributeType="String"/>
         <attribute name="value" optional="YES" attributeType="String"/>
-        <relationship name="person" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Person" inverseName="fields" inverseEntity="Person"/>
     </entity>
     <entity name="Person" representedClassName="Person" syncable="YES" codeGenerationType="class">
         <attribute name="addresses" optional="YES" attributeType="Transformable"/>
         <attribute name="dateOfBirth" optional="YES" attributeType="String"/>
         <attribute name="emails" optional="YES" attributeType="Transformable"/>
+        <attribute name="fields" optional="YES" attributeType="Transformable"/>
         <attribute name="firstName" optional="YES" attributeType="String"/>
         <attribute name="isFavorite" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
         <attribute name="lastName" optional="YES" attributeType="String"/>
         <attribute name="phoneNumbers" optional="YES" attributeType="Transformable"/>
         <attribute name="profileImage" optional="YES" attributeType="Binary"/>
-        <relationship name="fields" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Field" inverseName="person" inverseEntity="Field"/>
     </entity>
     <elements>
         <element name="Person" positionX="-36" positionY="9" width="128" height="178"/>
-        <element name="Field" positionX="-36" positionY="72" width="128" height="88"/>
+        <element name="Field" positionX="-36" positionY="81" width="128" height="73"/>
     </elements>
 </model>
