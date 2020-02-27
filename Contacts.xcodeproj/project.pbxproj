@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		52DA79C0E3A347B915DB8EEB /* Pods_Contacts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7DA715FC105ED13A55ED854D /* Pods_Contacts.framework */; };
+		9083B3F3240795650000F867 /* FieldTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9083B3F2240795650000F867 /* FieldTableViewCell.swift */; };
 		908CE1C424062B3900E8BE32 /* NewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 908CE1C324062B3900E8BE32 /* NewViewController.swift */; };
 		908D9C9524023FD70060174A /* CustomFieldTextFieldBulletinItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 908D9C9424023FD70060174A /* CustomFieldTextFieldBulletinItem.swift */; };
 		9091B6C6240388BF004A3C58 /* FieldsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9091B6C5240388BF004A3C58 /* FieldsModel.swift */; };
@@ -60,6 +61,7 @@
 /* Begin PBXFileReference section */
 		31D2E602750EE12B5F71E140 /* Pods-Contacts.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Contacts.release.xcconfig"; path = "Pods/Target Support Files/Pods-Contacts/Pods-Contacts.release.xcconfig"; sourceTree = "<group>"; };
 		7DA715FC105ED13A55ED854D /* Pods_Contacts.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Contacts.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		9083B3F2240795650000F867 /* FieldTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FieldTableViewCell.swift; sourceTree = "<group>"; };
 		908CE1C324062B3900E8BE32 /* NewViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewViewController.swift; sourceTree = "<group>"; };
 		908D9C9424023FD70060174A /* CustomFieldTextFieldBulletinItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomFieldTextFieldBulletinItem.swift; sourceTree = "<group>"; };
 		9091B6C5240388BF004A3C58 /* FieldsModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FieldsModel.swift; sourceTree = "<group>"; };
@@ -179,6 +181,7 @@
 				FEA6A3F721CA5BE5006410C7 /* ProfileVC.swift */,
 				90A7AF41240297AC00B7BAA8 /* ExportViewController.swift */,
 				908CE1C324062B3900E8BE32 /* NewViewController.swift */,
+				9083B3F2240795650000F867 /* FieldTableViewCell.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -459,6 +462,7 @@
 				FE57A5DB21CC4F6000F22572 /* ProfileTypeEnum.swift in Sources */,
 				FE11887921D6ADE8004B8CA6 /* StringExtension.swift in Sources */,
 				FEA6A3FA21CA5F3C006410C7 /* CreateProfileCell.swift in Sources */,
+				9083B3F3240795650000F867 /* FieldTableViewCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

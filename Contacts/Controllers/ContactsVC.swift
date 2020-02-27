@@ -447,9 +447,9 @@ extension ContactsVC: UITableViewDataSource, UITableViewDelegate {
             firstName = personArray[rowNumber].firstName!
             lastName = personArray[rowNumber].lastName!
             dateOfBirth = personArray[rowNumber].dateOfBirth!
-            phoneNumbers = personArray[rowNumber].phoneNumbers!
-            emails = personArray[rowNumber].emails!
-            addresses = personArray[rowNumber].addresses!
+//            phoneNumbers = personArray[rowNumber].phoneNumbers!
+  //          emails = personArray[rowNumber].emails!
+   //         addresses = personArray[rowNumber].addresses!
             fields = personArray[rowNumber].fields!
             contactImage = contactImagesDictionary[fullName]!
             favorite = contactFavoritesDictionary[fullName]!
@@ -462,7 +462,7 @@ extension ContactsVC: UITableViewDataSource, UITableViewDelegate {
         }
         
         let profileVC = self.storyboard?.instantiateViewController(withIdentifier: "ProfileVC") as! ProfileVC
-        profileVC.initProfileView(firstName: firstName, lastName: lastName, dateOfBirth: dateOfBirth, profileImage: contactImage, phoneNumbers: phoneNumbers as! [String], emails: emails as! [String], addresses: addresses as! [String],fields: fields as! [String], profileType: .view, isFavorite: isFavorite)
+        profileVC.initProfileView(firstName: firstName, lastName: lastName, dateOfBirth: dateOfBirth, profileImage: contactImage,fields: fields as! [String], profileType: .view, isFavorite: isFavorite)
         
         present(profileVC, animated: true, completion: nil)
     }

@@ -16,6 +16,12 @@ class ProfileVC: UIViewController {
     
     //MARK: Variables, Constants, Arrays ------------------------------------------------------------
     
+    
+    @IBOutlet weak var fieldtableView: UITableView!
+    @IBOutlet weak var addBtn: UIButton!
+    @IBAction func onAddFieldButtonClick(_ sender: Any) {
+         customField.showBulletin(above: self)
+    }
     private var isNameLblHidden = Bool()
     private var isModifyBtnHidden = Bool()
     private var isDateLblHidden = Bool()
@@ -40,9 +46,9 @@ class ProfileVC: UIViewController {
     private var fieldList : [FieldModel] = []
     
     
-    private var phoneNumberArray = [String]()
-    private var emailArray = [String]()
-    private var addressArray = [String]()
+  //  private var phoneNumberArray = [String]()
+ //   private var emailArray = [String]()
+ //   private var addressArray = [String]()
     
     private var fieldsArray = [String]()
     
@@ -61,6 +67,8 @@ class ProfileVC: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        fieldtableView.delegate = self
+        fieldtableView.dataSource = self
         setupProfileVC()
     }
     
@@ -237,9 +245,9 @@ class ProfileVC: UIViewController {
         
         if profileType == ProfileTypeEnum.createNew {
             
-            if firstNameTxtField.text != "" && lastNameTxtField.text != "" && dateOfBirthTextField.text != "" && (userDataArray[0]?.count)! >= 1 && (userDataArray[1]?.count)! >= 1 {
+            if firstNameTxtField.text != "" && lastNameTxtField.text != "" && dateOfBirthTextField.text != "" && (userDataArray[0]?.count)! >= 0 && (userDataArray[1]?.count)! >= 0 {
                 
-                saveProfile(firstName: (firstNameTxtField.text?.capitalized)!, lastName: (lastNameTxtField.text?.capitalized)!, dateOfBirth: dateOfBirthTextField.text!, phoneNumbers: userDataArray[0]!, emails: userDataArray[1]!, addresses: userDataArray[2]!,fields: userDataArray[3]!, profileImage: profileImg.image!, isFavoritePerson: isFavorite) { (complete) in
+                saveProfile(firstName: (firstNameTxtField.text?.capitalized)!, lastName: (lastNameTxtField.text?.capitalized)!, dateOfBirth: dateOfBirthTextField.text!, phoneNumbers: userDataArray[0]!, emails: userDataArray[1]!, addresses: userDataArray[2]!,fields: fieldsArray, profileImage: profileImg.image!, isFavoritePerson: isFavorite) { (complete) in
                     
                     if complete {
                         guard let contactsVC = storyboard?.instantiateViewController(withIdentifier: "ContactsVC") else { return }
@@ -263,9 +271,9 @@ class ProfileVC: UIViewController {
                 isFavoriteBool = true
             }
             
-            if firstNameTxtField.text != "" && lastNameTxtField.text != "" && dateOfBirthTextField.text != "" && (userDataArray[0]?.count)! >= 1 && (userDataArray[1]?.count)! >= 1 {
+            if firstNameTxtField.text != "" && lastNameTxtField.text != "" && dateOfBirthTextField.text != "" && (userDataArray[0]?.count)! >= 0 && (userDataArray[1]?.count)! >= 0 {
             
-                modifyProfileInfo(searchFirstName: firstNameString, searchLastName: lastNameString, searchDateOfBirth: dateOfBirthString, newFirstName: firstNameTxtField.text!, newLastName: lastNameTxtField.text!, newDateOfBirth: dateOfBirthTextField.text!, newProfileImage: profileImg.image!, newPhonenumbers: userDataArray[0]!, newEmails: userDataArray[1]!, newAddresses: userDataArray[2]!, newIsFavoritePerson: isFavoriteBool ,fields: userDataArray[3]!) { (complete) in
+                modifyProfileInfo(searchFirstName: firstNameString, searchLastName: lastNameString, searchDateOfBirth: dateOfBirthString, newFirstName: firstNameTxtField.text!, newLastName: lastNameTxtField.text!, newDateOfBirth: dateOfBirthTextField.text!, newProfileImage: profileImg.image!, newPhonenumbers: userDataArray[0]!, newEmails: userDataArray[1]!, newAddresses: userDataArray[2]!, newIsFavoritePerson: isFavoriteBool ,fields: fieldsArray) { (complete) in
                 
                     if complete {
                         guard let contactsVC = storyboard?.instantiateViewController(withIdentifier: "ContactsVC") else { return }
@@ -323,13 +331,13 @@ class ProfileVC: UIViewController {
             favoritesLbl.text = "Remove from favorites"
         }
         
-        backgroundTableViewTopContraint.constant = 40
+//        backgroundTableViewTopContraint.constant = 40
         
         firstNameTxtField.text = firstNameString
         lastNameTxtField.text = lastNameString
         dateOfBirthTextField.text = dateOfBirthString
         
-        profileTableView.reloadData()
+//        profileTableView.reloadData()
     }
     
     @IBAction private func cancelBtnPressed(_ sender: Any) {
@@ -370,12 +378,12 @@ class ProfileVC: UIViewController {
             favoritesLbl.text = "Remove from favorites"
         }
         
-        backgroundTableViewTopContraint.constant = -10
+//        backgroundTableViewTopContraint.constant = -10
         
         nameLbl.text = "\(firstNameString) \(lastNameString)"
         dateOfBirthLbl.text = "Birthday: \(dateOfBirthString) 🎉"
         
-        profileTableView.reloadData()
+      //  profileTableView.reloadData()
     }
     
     @IBAction private func backBtnPressed(_ sender: Any) {
@@ -395,8 +403,9 @@ class ProfileVC: UIViewController {
         userDataArray[1] = emails
         userDataArray[2] = addresses
         userDataArray[3] = fields
+        fieldsArray = fields
         
-        for item in userDataArray[3]! {
+        for item in fieldsArray {
            let somedata = Data(item.utf8)
            let jsonDecoder = JSONDecoder()
             do{
@@ -408,16 +417,22 @@ class ProfileVC: UIViewController {
             }
          
         }
-        for item in fieldList{
-            yPos += 22
-            let tf = UITextField()
-            tf.text = item.fieldName
-            tf.textColor = UIColor.white
-            tf.frame = CGRect(x: xPos, y: yPos, width: 100, height: 20)
-            tf.backgroundColor = UIColor.black
-            self.view.addSubview(tf)
+    
+       
+        if(fieldList.count != 0){
+//            self.fieldtableView.reloadData()
+//            for item in fieldList{
+//                      yPos += 22
+//                      let tf = CustomTextField()
+//                      tf.text = item.fieldName
+//                      tf.textColor = UIColor.white
+//                      tf.frame = CGRect(x: xPos, y: yPos, width: 200, height: 20)
+//
+//                      tf.backgroundColor = UIColor.black
+//                    //  self.stackview.addSubview(tf)
+//                  }
         }
-        print("List Size" + "\(fieldList[0].fieldName)")
+      //  print("List Size" + "\(fieldList[0].fieldName)")
         
         //  let jsonDecoder = JSONDecoder()
         //  self.fieldList = try jsonDecoder.decode(FieldModel.self, from: userDataArray[3])
@@ -487,13 +502,13 @@ class ProfileVC: UIViewController {
         lastNameTxtField.delegate = self
         dateOfBirthTextField.delegate = self
         
-        profileTableView.delegate = self
-        profileTableView.dataSource = self
+        //  profileTableView.delegate = self
+        // profileTableView.dataSource = self
         
         if profileType == ProfileTypeEnum.createNew {
-            backgroundTableViewTopContraint.constant = 40
+        //    backgroundTableViewTopContraint.constant = 40
         } else if profileType == ProfileTypeEnum.view {
-            backgroundTableViewTopContraint.constant = -10
+        //    backgroundTableViewTopContraint.constant = -10
         }
         
         nameLbl.isHidden = isNameLblHidden
@@ -525,14 +540,33 @@ class ProfileVC: UIViewController {
     
     private func appendUserData(text: String, section: Int) {
         
+        fieldsArray.append(text)
         if var array = userDataArray[section] {
             array.append(text)
             userDataArray[section] = array
         } else {
             userDataArray[section] = [text]
         }
-        
-        profileTableView.reloadData()
+        do{
+            let somedata = Data(text.utf8)
+            let jsonDecoder = JSONDecoder()
+          let field = try jsonDecoder.decode(FieldModel.self, from: somedata)
+//                               yPos += 22
+//                               let tf = CustomTextField()
+//                               tf.text = field.fieldValue
+//                               tf.textColor = UIColor.black
+//            tf.borderStyle = UITextField.BorderStyle.line
+//                               tf.frame = CGRect(x: xPos, y: yPos, width: 200, height: 20)
+//
+//                               tf.backgroundColor = UIColor.white
+                             //  self.stackview.addSubview(tf)
+            
+        } catch let jsError{
+            print(jsError)
+        }
+         fieldtableView.reloadData()
+        print("Reload calling")
+//        profileTableView.reloadData()
     }
     
     @objc private func addUserDataText(button: UIButton) {
@@ -685,9 +719,9 @@ extension ProfileVC {
         person.lastName = lastName.removeWhiteSpaces()
         person.dateOfBirth = dateOfBirth
         person.profileImage = profileImageData
-        person.phoneNumbers = phoneNumbers as NSObject
-        person.emails = emails as NSObject
-        person.addresses = addresses as NSObject
+      //  person.phoneNumbers = phoneNumbers as NSObject
+     //   person.emails = emails as NSObject
+    //    person.addresses = addresses as NSObject
         person.fields = fields as NSObject
         person.isFavorite = isFavoriteBool
         
@@ -770,108 +804,34 @@ extension ProfileVC: UITextFieldDelegate {
 
 //MARK: TableView ------------------------------------------------------------------------------
 
-extension ProfileVC: UITableViewDelegate, UITableViewDataSource {
+extension ProfileVC: UITableViewDelegate, UITableViewDataSource{
     
-    func numberOfSections(in tableView: UITableView) -> Int {
-        return userDataArray.keys.count
-    }
-    
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+  func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+//    return userDataArray[3]!.count
+    return fieldsArray.count
+     }
+     
+     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+         let cell = fieldtableView.dequeueReusableCell(withIdentifier: "FieldTableViewCell") as! FieldTableViewCell
         
-        return (userDataArray[section]?.count)!
-    }
-    
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 45
-    }
-    
-    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return 40
-    }
-    
-    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let header = Bundle.main.loadNibNamed("SectionHeaderView", owner: self, options: nil)?.first as! SectionHeaderView
-        
-        let sectionName = section == 0 ? "Phone Number" : section == 1 ? "Email" : section == 2 ? "Address" : "fields"
-        
-        header.sectionTitleLabel.text = sectionName
-        header.addButton.addTarget(self, action: #selector(addUserDataText), for: .touchUpInside)
-        
-        header.addButton.tag = section
-        
-        if isTableViewEditable == false {
-            header.addButton.isHidden = true
-            header.addButtonShadowView.isHidden = true
-        } else if isTableViewEditable == true {
-            header.addButton.isHidden = false
-            header.addButtonShadowView.isHidden = false
-        }
+        if(fieldsArray != nil){
+           
+            do{
+                            let somedata = Data(fieldsArray[indexPath.row].utf8)
+                              let jsonDecoder = JSONDecoder()
+                            let field = try jsonDecoder.decode(FieldModel.self, from: somedata)
+                              cell.fieldName.text =  field.fieldName
+                              cell.fieldtext.text = field.fieldValue
 
-        return header
-    }
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = profileTableView.dequeueReusableCell(withIdentifier: "createProfileCell", for: indexPath) as? CreateProfileCell else { return UITableViewCell() }
+                          } catch let jsError{
+                              print(jsError)
+                          }
+            }
         
-        let phoneIcon = UIImage(named: "bluePhoneIcon")
-        let emailIcon = UIImage(named: "blueEmailIcon")
-        let mapIcon = UIImage(named: "blueMapIcon")
-        
-        let icon = indexPath.section == 0 ? phoneIcon : indexPath.section == 1 ? emailIcon : mapIcon
-        
-        let value = userDataArray[indexPath.section]
-        
-        cell.txtLabel.text = value![indexPath.row]
-        cell.actionImageIcon.image = icon
-        
-        if isTableViewEditable == false {
-            cell.actionImageIcon.isHidden = false
-            cell.actionImageIconShadow.isHidden = false
-            profileTableView.allowsSelection = true
-        } else if isTableViewEditable == true {
-            cell.actionImageIcon.isHidden = true
-            cell.actionImageIconShadow.isHidden = true
-            profileTableView.allowsSelection = false
-        }
-        
-        return cell
-    }
-    
-    func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-        
-        if isTableViewEditable == false {
-            return false
-        } else {
-            return true
-        }
-    
-    }
-    
-    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
-        
-        if editingStyle == .delete {
-            
-            var tempArray = userDataArray[indexPath.section]
-            tempArray?.remove(at: indexPath.row)
-            
-            userDataArray[indexPath.section] = tempArray
-            
-            tableView.beginUpdates()
-            tableView.deleteRows(at: [indexPath], with: .automatic)
-            profileTableView.reloadData()
-            tableView.endUpdates()
-        }
-    }
-    
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let indexPath = tableView.indexPathForSelectedRow
-        
-        let selectedValue = userDataArray[(indexPath?.section)!]![(indexPath?.row)!]
-        
-        let presentFunction = indexPath!.section == 0 ? makeAPhoneCall(number: selectedValue) : indexPath!.section == 1 ? sendEmail(recipient: selectedValue) : openAddressInMaps(address: selectedValue)
-        
-        presentFunction
-    }
+       
+                return cell
+         
+     }
 }
 
 //MARK: Image Picker -----------------------------------------------------------------
