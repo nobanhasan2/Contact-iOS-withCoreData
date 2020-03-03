@@ -1,7 +1,6 @@
 //
 //  CustomUIViewTopRounded.swift
 //  Contacts
-//
 //  Created by Johnny Perdomo on 12/22/18.
 //  Copyright © 2018 Johnny Perdomo. All rights reserved.
 //

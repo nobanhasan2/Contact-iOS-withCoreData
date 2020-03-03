@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="15508" systemVersion="19C57" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
     <entity name="Field" representedClassName="field" syncable="YES" codeGenerationType="class">
-        <attribute name="fieldName" optional="YES" attributeType="String"/>
-        <attribute name="value" optional="YES" attributeType="String"/>
+        <attribute name="fieldName" optional="YES" attributeType="Transformable"/>
+        <attribute name="fieldValue" optional="YES" attributeType="String"/>
+        <relationship name="person" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Person"/>
     </entity>
     <entity name="Person" representedClassName="Person" syncable="YES" codeGenerationType="class">
         <attribute name="addresses" optional="YES" attributeType="Transformable"/>
@@ -16,7 +17,7 @@
         <attribute name="profileImage" optional="YES" attributeType="Binary"/>
     </entity>
     <elements>
+        <element name="Field" positionX="-36" positionY="81" width="128" height="88"/>
         <element name="Person" positionX="-36" positionY="9" width="128" height="178"/>
-        <element name="Field" positionX="-36" positionY="81" width="128" height="73"/>
     </elements>
 </model>

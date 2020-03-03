@@ -13,17 +13,19 @@ import CoreData
 class ContactsVC: UIViewController {
 
     //MARK: Variables, Constants, Arrays ------------------------------------------------------------
-    
     private let searchController = UISearchController(searchResultsController: nil)
     
     private let indexLetters = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"]
     var indexLettersInContactsArray = [String]()
     
     var namesArray = [String]()
+    
     private var contactImagesArray = [UIImage]()
     
     private var personArray: [Person] = []
+    
     private var filteredPersonArray: [Person] = []
+    
     private var onlyFavoriteContactsArray: [Person] = []
     
     var contactNamesDictionary = [String: [String]]() //i.e. "A" : ["Anakin Skywalker" , "Astro Boy"], "C" : ["Charlie Brown"], "J" : ["Johnny Perdomo", "Jason Vorhees", "Julia Child"]

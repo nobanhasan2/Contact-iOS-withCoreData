@@ -17,8 +17,8 @@ class CustomFieldTextFieldBulletinItem : BLTNPageItem {
     @objc public var textInputHandler: ((BLTNActionItem, String?) -> Void)? = nil
     
     override func makeViewsUnderDescription(with interfaceBuilder: BLTNInterfaceBuilder) -> [UIView]? {
-        textField = interfaceBuilder.makeTextField(placeholder: "Add a field", returnKey: .done, delegate: self)
-         textField2 = interfaceBuilder.makeTextField(placeholder: "field Name", returnKey: .done, delegate: self)
+        textField = interfaceBuilder.makeTextField(placeholder: "Field Name", returnKey: .done, delegate: self)
+         textField2 = interfaceBuilder.makeTextField(placeholder: "Field Value", returnKey: .done, delegate: self)
         return [textField,textField2]
     }
     override func tearDown() {
@@ -58,13 +58,13 @@ extension CustomFieldTextFieldBulletinItem: UITextFieldDelegate {
     
     func textFieldDidEndEditing(_ textField: UITextField) {
         
-        if isInputValid(text: textField.text) {
-            textInputHandler?(self, textField.text)
-        } else {
-            descriptionLabel!.textColor = .red
-            descriptionLabel!.text = "You must enter some text to continue."
-            textField.backgroundColor = UIColor.red.withAlphaComponent(0.3)
-        }
+//        if isInputValid(text: textField2.text) {
+//            textInputHandler?(self, textField2.text)
+//        } else {
+//            descriptionLabel!.textColor = .red
+//            descriptionLabel!.text = "You must enter some text to continue."
+//            textField.backgroundColor = UIColor.red.withAlphaComponent(0.3)
+//        }
     }
 }
 

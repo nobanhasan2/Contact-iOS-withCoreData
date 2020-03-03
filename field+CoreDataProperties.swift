@@ -2,7 +2,7 @@
 //  field+CoreDataProperties.swift
 //  
 //
-//  Created by Noban Aits on 24/2/20.
+//  Created by Noban Aits on 3/3/20.
 //
 //
 
@@ -16,7 +16,8 @@ extension field {
         return NSFetchRequest<field>(entityName: "Field")
     }
 
-    @NSManaged public var fieldName: String?
-    @NSManaged public var value: String?
+    @NSManaged public var fieldName: NSObject?
+    @NSManaged public var fieldValue: String?
+    @NSManaged public var person: Person?
 
 }

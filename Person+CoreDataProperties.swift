@@ -2,7 +2,7 @@
 //  Person+CoreDataProperties.swift
 //  
 //
-//  Created by Noban Aits on 23/2/20.
+//  Created by Noban Aits on 3/3/20.
 //
 //
 
@@ -19,11 +19,11 @@ extension Person {
     @NSManaged public var addresses: NSObject?
     @NSManaged public var dateOfBirth: String?
     @NSManaged public var emails: NSObject?
+    @NSManaged public var fields: NSObject?
     @NSManaged public var firstName: String?
     @NSManaged public var isFavorite: Bool
     @NSManaged public var lastName: String?
     @NSManaged public var phoneNumbers: NSObject?
     @NSManaged public var profileImage: Data?
-    @NSManaged public var fields: NSManagedObject?
 
 }

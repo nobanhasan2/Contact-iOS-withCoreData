@@ -1,11 +1,10 @@
 //
 //  CustomUIView.swift
 //  Contacts
-//
 //  Created by Johnny Perdomo on 12/23/18.
 //  Copyright © 2018 Johnny Perdomo. All rights reserved.
 //
-
+//
 import UIKit
 
 @IBDesignable class CustomUIView: UIView {
@@ -15,7 +14,6 @@ import UIKit
         
         layer.shadowPath = UIBezierPath(roundedRect: bounds, cornerRadius: rounded).cgPath
     }
-    
     @IBInspectable private var borderWidth: CGFloat {
         get {
             return layer.borderWidth
@@ -23,7 +21,7 @@ import UIKit
         set {
             layer.borderWidth = newValue
         }
-    }
+     }
     
     @IBInspectable private var borderColor: UIColor? {
         get {

@@ -7,10 +7,29 @@
 //
 
 import UIKit
-
+protocol TextFieldChangeDeleget {
+    func fieldTableCell( index: Int,didChange text: String)
+}
+protocol RemoveFieldDeleget {
+    func removeField( index: Int)
+}
 class FieldTableViewCell: UITableViewCell {
 
+    var index: Int?
+    var textFieldChangeDeleget : TextFieldChangeDeleget?
+    var removeFieldDeleget : RemoveFieldDeleget?
+    @IBOutlet weak var removeButton: UIButton!
     @IBOutlet weak var fieldName: UILabel!
+   
+   
+    @IBAction func onTapRemove(_ sender: Any) {
+        removeFieldDeleget?.removeField(index: index!)
+    }
+    
+    
+    @IBAction func textDidChange(_ sender: Any) {
+        textFieldChangeDeleget?.fieldTableCell(index: index!, didChange: fieldtext.text!)
+    }
     @IBOutlet weak var fieldtext: UITextField!
     override func awakeFromNib() {
         super.awakeFromNib()

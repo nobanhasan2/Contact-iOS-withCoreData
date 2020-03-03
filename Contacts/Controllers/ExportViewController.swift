@@ -10,29 +10,32 @@ import UIKit
 import CoreData
 class ExportViewController: UIViewController {
 
-    
+    @IBAction func onTapExport(_ sender: Any) {
+        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
+              let managedContext = appDelegate.persistentContainer.viewContext
+              print("Export")
+              let fetchRequest = NSFetchRequest<Person>(entityName: "Person")
+            
+              do {
+                  personArray = try managedContext.fetch(fetchRequest)
+                  print("fetched data new")
+                       
+              } catch {
+                  print("error fetching data")
+                         
+              }
+              
+              let exportString = createExportString()
+              print(exportString)
+              saveAndExport(exportString: exportString)
+             //  Do any additional setup after loading the view.
+    }
     private var personArray: [Person] = []
     
     override func viewDidLoad() {
-        super.viewDidLoad()
-        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
-        let managedContext = appDelegate.persistentContainer.viewContext
-        print("Export")
-        let fetchRequest = NSFetchRequest<Person>(entityName: "Person")
-      
-        do {
-            personArray = try managedContext.fetch(fetchRequest)
-            print("fetched data new")
-                 
-        } catch {
-            print("error fetching data")
-                   
-        }
         
-        let exportString = createExportString()
-        print(exportString)
-        saveAndExport(exportString: exportString)
-       //  Do any additional setup after loading the view.
+        super.viewDidLoad()
+      
     }
     
 
@@ -55,28 +58,28 @@ class ExportViewController: UIViewController {
           var dob : String?
        
           
-          var export : String = NSLocalizedString("First Name, Last Name, Mobile, Email, address, Date of birth, Custom Fields \n", comment: "")
+          var export : String = NSLocalizedString("First Name, Last Name,Custom Fields \n", comment: "")
          
           for (index, contacts) in personArray.enumerated() {
             
               fname = contacts.firstName
               lname = contacts.lastName
-              mobile = contacts.phoneNumbers as! NSArray
-              email = contacts.emails as! NSArray
-              address = contacts.addresses as! NSArray
+          //    mobile = contacts.phoneNumbers as! NSArray
+          //    email = contacts.emails as! NSArray
+          //    address = contacts.addresses as! NSArray
               fields = contacts.fields as! NSArray
               dob = "\(contacts.dateOfBirth)"
               //  let mobileString = (mobile as! NSArray).mutableCopy() as! NSMutableArray
-              let mobileString = mobile?.componentsJoined(by: ";")
+            //  let mobileString = mobile?.componentsJoined(by: ";")
               // let emailString = String(email! as! Substring)
-              let emailString = email?.componentsJoined(by: ";")
+            //  let emailString = email?.componentsJoined(by: ";")
               //let addressString = String(address! as! Substring)
-              let addressString = address?.componentsJoined(by: ";")
+             //   let addressString = address?.componentsJoined(by: ";")
               //let fieldsString = String(fields! as! Substring)+"\n"
               let fieldsString = fields?.componentsJoined(by: ";")
-              let fline =  fname! + "," + lname! + "," + mobileString! + "," + emailString! + ","
+              let fline =  fname! + "," + lname! + "," + dob! + ","
             
-              let perline = fline + addressString! + "," + dob! + "," + fieldsString! + "\n"
+              let perline = fline + "," + fieldsString! + "\n"
               export += perline
               
           }
@@ -98,8 +101,10 @@ class ExportViewController: UIViewController {
           
           if fileHandle != nil {
               fileHandle!.seekToEndOfFile()
+            
               let csvData = exportString.data(using: String.Encoding.utf8, allowLossyConversion: false)
-            fileHandle!.write(csvData!)
+            
+              fileHandle!.write(csvData!)
               
               fileHandle!.closeFile()
               

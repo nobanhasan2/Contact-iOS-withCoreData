@@ -44,6 +44,7 @@ class ProfileVC: UIViewController {
     private var profileImage = UIImage()
     private var fieldString = String()
     private var fieldList : [FieldModel] = []
+    private var isEditable : Bool = false
     
     
   //  private var phoneNumberArray = [String]()
@@ -72,93 +73,8 @@ class ProfileVC: UIViewController {
         setupProfileVC()
     }
     
-    //MARK: Bulletin Items -----------------------------------------------------------------------------
-    
-    lazy var phoneNumberBulletin: BLTNItemManager = {
-        
-        let page = PhoneTextFieldBulletinItem(title: "Phone Number")
-        page.descriptionText = "Enter a phone number"
-        page.actionButtonTitle = "Enter"
-        page.alternativeButtonTitle = "Close"
-        
-        page.actionHandler = { (item: BLTNActionItem) in
-            
-            var numberString = page.textField.text!
-            
-            if self.isPhoneNumberValid(numberString) == false {
-                self.showIncorrectPhoneNumberErrorCard()
-                return
-            }
-            
-            numberString.insert("-", at: numberString.index(numberString.startIndex, offsetBy: 3))
-            numberString.insert("-", at: numberString.index(numberString.startIndex, offsetBy: 7))
-            
-            self.appendUserData(text: numberString, section: self.userDataButtonInfo.tag)
-            self.dismissPhoneNumberBoard()
-        }
-        
-        page.alternativeHandler = { (item: BLTNActionItem) in
-            self.dismissPhoneNumberBoard()
-        }
-        
-        let item: BLTNItem = page
-        item.isDismissable = true
-        item.requiresCloseButton = false
-        return BLTNItemManager(rootItem: item)
-    }()
-    
-    lazy var emailBulletin: BLTNItemManager = {
-        
-        let page = EmailTextFieldBulletinItem(title: "Email")
-        page.descriptionText = "Enter an email address."
-        page.actionButtonTitle = "Enter"
-        page.alternativeButtonTitle = "Close"
-        
-        page.actionHandler = { (item: BLTNActionItem) in
-            
-            if self.isEmailValid(page.textField.text!) == false {
-                self.showIncorrectEmailFormatErrorCard()
-                return
-            }
-            
-            self.appendUserData(text: page.textField.text!.lowercased(), section: self.userDataButtonInfo.tag)
-            self.dismissEmailBoard()
-        }
-        
-        page.alternativeHandler = { (item: BLTNActionItem) in
-            self.dismissEmailBoard()
-        }
-        
-        let item: BLTNItem = page
-        item.isDismissable = true
-        item.requiresCloseButton = false
-        return BLTNItemManager(rootItem: item)
-    }()
-    
-    lazy var addressBulletin: BLTNItemManager = {
-        
-        let page = AddressTextFieldBulletinItem(title: "Address")
-        page.descriptionText = "Enter a work or home address."
-        page.actionButtonTitle = "Enter"
-        page.alternativeButtonTitle = "Close"
-
-        page.actionHandler = { (item: BLTNActionItem) in
-            
-            self.appendUserData(text: page.textField.text!, section: self.userDataButtonInfo.tag)
-            self.dismissAddressBoard()
-        }
-        
-        page.alternativeHandler = { (item: BLTNActionItem) in
-            self.dismissAddressBoard()
-        }
-        
-        let item: BLTNItem = page
-        item.isDismissable = true
-        item.requiresCloseButton = false
-        return BLTNItemManager(rootItem: item)
-    }()
-    
-    lazy var customField: BLTNItemManager = {
+       //MARK: Bulletin Items -----------------------------------------------------------------------------
+       lazy var customField: BLTNItemManager = {
         
         let page = CustomFieldTextFieldBulletinItem(title: "Field")
         page.descriptionText = "Enter a field value"
@@ -167,21 +83,25 @@ class ProfileVC: UIViewController {
         
        
         page.actionHandler = { (item: BLTNActionItem) in
-            let field =  FieldModel(name: page.textField.text!,value: page.textField2.text!)
-            do{
-                let jsonEncoder = JSONEncoder()
-                let jsonData = try jsonEncoder.encode(field)
-                let json = String(data: jsonData, encoding: String.Encoding.utf8)
-                self.appendUserData(text: json!, section: self.userDataButtonInfo.tag)
-            }
-            catch let error as NSError
-            {
-                print(error.localizedDescription)
-            }
+            
+            if(!page.textField.text!.isEmpty){
+                let field =  FieldModel(name: page.textField.text!,value: page.textField2.text!)
+                           do{
+                               let jsonEncoder = JSONEncoder()
+                               let jsonData = try jsonEncoder.encode(field)
+                               let json = String(data: jsonData, encoding: String.Encoding.utf8)
+                               self.appendUserData(text: json!, section: self.userDataButtonInfo.tag)
+                           }
+                           catch let error as NSError
+                           {
+                               print(error.localizedDescription)
+                           }
 
-          
-            self.dismissCustomBoard()
-        }
+                         
+                           self.dismissCustomBoard()
+                       }
+            }
+           
         
         page.alternativeHandler = { (item: BLTNActionItem) in
         self.dismissCustomBoard()        }
@@ -306,17 +226,20 @@ class ProfileVC: UIViewController {
         lastNameTxtField.isHidden = false
         dateOfBirthTextField.isHidden = false
         
+        isEditable = true
+        addBtn.isHidden = false
+        fieldtableView.reloadData()
         modifyBtn.isHidden = true
         backBtn.isHidden = true
         
         saveBtn.isHidden = false
         cancelBtn.isHidden = false
-        changeImageBtn.isHidden = false
+        changeImageBtn.isHidden = true
         
         isTableViewEditable = true
         
-        favoritesBtn.isHidden = false
-        favoritesLbl.isHidden = false
+        favoritesBtn.isHidden = true
+        favoritesLbl.isHidden = true
         favoritesIconImg.isHidden = true
         favoritesIconShadowView.isHidden = true
         
@@ -398,7 +321,8 @@ class ProfileVC: UIViewController {
     //MARK: VC Functions -----------------------------------------------------------------------------
     
     func initProfileView(firstName: String = "", lastName: String = "", dateOfBirth: String = "", profileImage: UIImage = UIImage(named: "personPlaceholder")!, phoneNumbers: [String] = [], emails: [String] = [], addresses: [String] = [],fields: [String] = [], profileType: ProfileTypeEnum, isFavorite: IsFavoriteEnum = .no) {
-        
+        isEditable = false
+//        addBtn.isHidden = true
         userDataArray[0] = phoneNumbers
         userDataArray[1] = emails
         userDataArray[2] = addresses
@@ -453,15 +377,14 @@ class ProfileVC: UIViewController {
             self.isLastNameTextFieldHidden = false
             self.isDateOfBirthTextFieldHidden = false
             self.isSaveBtnHidden = false
-            self.isChangeImageBtnHidden = false
+            self.isChangeImageBtnHidden = true
             
             self.isTableViewEditable = true
             
-            self.isFavoritesLblHidden = false
-            self.isFavoritesBtnHidden = false
+            self.isFavoritesLblHidden = true
+            self.isFavoritesBtnHidden = true
             self.isFavoritesIconImgHidden = true
             self.isFavoritesIconShadowViewHidden = true
-            
             self.profileImage = profileImage
             
         case .view:
@@ -506,6 +429,9 @@ class ProfileVC: UIViewController {
         // profileTableView.dataSource = self
         
         if profileType == ProfileTypeEnum.createNew {
+            addBtn.isHidden = false
+            isEditable = true
+            fieldtableView.reloadData()
         //    backgroundTableViewTopContraint.constant = 40
         } else if profileType == ProfileTypeEnum.view {
         //    backgroundTableViewTopContraint.constant = -10
@@ -571,18 +497,9 @@ class ProfileVC: UIViewController {
     
     @objc private func addUserDataText(button: UIButton) {
         
-        userDataButtonInfo = button
+    //    userDataButtonInfo = button
+      //  customField.showBulletin(above: self)
         
-        if button.tag == 0 {
-             phoneNumberBulletin.showBulletin(above: self)
-        } else if button.tag == 1 {
-            emailBulletin.showBulletin(above: self)
-        } else if button.tag == 2 {
-            addressBulletin.showBulletin(above: self)
-        }
-        else if button.tag == 3{
-            customField.showBulletin(above: self)
-        }
     }
     
     private func addFavoritePerson(isFavoritePerson: IsFavoriteEnum) {
@@ -678,17 +595,7 @@ extension ProfileVC {
         datePickerBulletin.dismissBulletin()
     }
     
-    private func dismissPhoneNumberBoard() {
-        phoneNumberBulletin.dismissBulletin()
-    }
-    
-    private func dismissEmailBoard() {
-        emailBulletin.dismissBulletin()
-    }
-    
-    private func dismissAddressBoard() {
-        addressBulletin.dismissBulletin()
-    }
+
     
     private func dismissCustomBoard() {
         customField.dismissBulletin()
@@ -719,9 +626,9 @@ extension ProfileVC {
         person.lastName = lastName.removeWhiteSpaces()
         person.dateOfBirth = dateOfBirth
         person.profileImage = profileImageData
-      //  person.phoneNumbers = phoneNumbers as NSObject
-     //   person.emails = emails as NSObject
-    //    person.addresses = addresses as NSObject
+      //person.phoneNumbers = phoneNumbers as NSObject
+      //person.emails = emails as NSObject
+      //person.addresses = addresses as NSObject
         person.fields = fields as NSObject
         person.isFavorite = isFavoriteBool
         
@@ -803,33 +710,86 @@ extension ProfileVC: UITextFieldDelegate {
 }
 
 //MARK: TableView ------------------------------------------------------------------------------
-
+extension ProfileVC : TextFieldChangeDeleget {
+    func fieldTableCell(index : Int, didChange text: String) {
+        do{
+                let somedata = Data(fieldsArray[index].utf8)
+                let jsonDecoder = JSONDecoder()
+                let field = try jsonDecoder.decode(FieldModel.self, from: somedata)
+                field.fieldValue = text
+                let jsonEncoder = JSONEncoder()
+                let jsonData = try jsonEncoder.encode(field)
+                let json = String(data: jsonData, encoding: String.Encoding.utf8)
+                fieldsArray[index] = json!
+                } catch let jsError{
+                print(jsError)
+                }
+        
+        
+    }
+    
+    
+}
+extension ProfileVC : RemoveFieldDeleget{
+    func removeField(index: Int) {
+        fieldsArray.remove(at: index)
+        fieldtableView.reloadData()
+    }
+    
+    
+}
 extension ProfileVC: UITableViewDelegate, UITableViewDataSource{
     
+    
+    
   func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-//    return userDataArray[3]!.count
+    //    return userDataArray[3]!.count
     return fieldsArray.count
      }
      
      func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
          let cell = fieldtableView.dequeueReusableCell(withIdentifier: "FieldTableViewCell") as! FieldTableViewCell
-        
-        if(fieldsArray != nil){
-           
-            do{
-                            let somedata = Data(fieldsArray[indexPath.row].utf8)
-                              let jsonDecoder = JSONDecoder()
-                            let field = try jsonDecoder.decode(FieldModel.self, from: somedata)
-                              cell.fieldName.text =  field.fieldName
-                              cell.fieldtext.text = field.fieldValue
+         cell.index = indexPath.row
+         cell.textFieldChangeDeleget = self
+         cell.removeFieldDeleget = self
+        if(!isEditable){
+           if(fieldsArray != nil){
+                      do{
+                                         let somedata = Data(fieldsArray[indexPath.row].utf8)
+                                         let jsonDecoder = JSONDecoder()
+                                         let field = try jsonDecoder.decode(FieldModel.self, from: somedata)
+                                         cell.fieldName.text =  field.fieldName
+                                         cell.fieldtext.text = field.fieldValue
+                        cell.fieldtext.isUserInteractionEnabled = false
+                        cell.removeButton.isHidden = true
 
                           } catch let jsError{
-                              print(jsError)
+                                         print(jsError)
                           }
-            }
-        
+                       }
+                       return cell
+        }
+        else{
+            cell.index = indexPath.row
+                              cell.textFieldChangeDeleget = self
+                              if(fieldsArray != nil){
+                                 
+                                  do{
+                                                    let somedata = Data(fieldsArray[indexPath.row].utf8)
+                                                    let jsonDecoder = JSONDecoder()
+                                                    let field = try jsonDecoder.decode(FieldModel.self, from: somedata)
+                                                    cell.fieldName.text =  field.fieldName
+                                     cell.fieldtext.isUserInteractionEnabled = true
+                                     cell.removeButton.isHidden = false
+                                                    cell.fieldtext.text = field.fieldValue
+
+                                     } catch let jsError{
+                                                    print(jsError)
+                                     }
+                                  }
+                                  return cell
+        }
        
-                return cell
          
      }
 }
