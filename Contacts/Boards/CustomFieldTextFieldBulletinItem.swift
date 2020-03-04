@@ -12,24 +12,22 @@ import BLTNBoard
 class CustomFieldTextFieldBulletinItem : BLTNPageItem {
     
     @objc public var textField: UITextField!
-     @objc public var textField2: UITextField!
     
     @objc public var textInputHandler: ((BLTNActionItem, String?) -> Void)? = nil
     
     override func makeViewsUnderDescription(with interfaceBuilder: BLTNInterfaceBuilder) -> [UIView]? {
         textField = interfaceBuilder.makeTextField(placeholder: "Field Name", returnKey: .done, delegate: self)
-         textField2 = interfaceBuilder.makeTextField(placeholder: "Field Value", returnKey: .done, delegate: self)
-        return [textField,textField2]
+        
+        return [textField]
     }
     override func tearDown() {
         super.tearDown()
         textField?.delegate = nil
-        textField2.delegate = nil
     }
     
     override func actionButtonTapped(sender: UIButton) {
         textField.resignFirstResponder()
-        textField2.resignFirstResponder()
+     
         super.actionButtonTapped(sender: sender)
     }
 }

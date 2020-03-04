@@ -43,7 +43,8 @@ class ProfileVC: UIViewController {
     private var dateOfBirthString = String()
     private var profileImage = UIImage()
     private var fieldString = String()
-    private var fieldList : [FieldModel] = []
+    private var fieldList = [FieldModel]()
+    private var pFieldList = [FieldModel]()
     private var isEditable : Bool = false
     
     
@@ -68,8 +69,11 @@ class ProfileVC: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+       
         fieldtableView.delegate = self
         fieldtableView.dataSource = self
+        fieldList = PreferenceUtil.getAllFields().fields!
+       
         setupProfileVC()
     }
     
@@ -85,7 +89,13 @@ class ProfileVC: UIViewController {
         page.actionHandler = { (item: BLTNActionItem) in
             
             if(!page.textField.text!.isEmpty){
-                let field =  FieldModel(name: page.textField.text!,value: page.textField2.text!)
+                let field =  FieldModel(name: page.textField.text!,value: "")
+                if(PreferenceUtil.isExistInField(name: page.textField.text!)){
+                    print("Exist in field")
+                }else{
+                       PreferenceUtil.addNewFields(field: field)
+                }
+             
                            do{
                                let jsonEncoder = JSONEncoder()
                                let jsonData = try jsonEncoder.encode(field)
@@ -167,7 +177,7 @@ class ProfileVC: UIViewController {
             
             if firstNameTxtField.text != "" && lastNameTxtField.text != "" && dateOfBirthTextField.text != "" && (userDataArray[0]?.count)! >= 0 && (userDataArray[1]?.count)! >= 0 {
                 
-                saveProfile(firstName: (firstNameTxtField.text?.capitalized)!, lastName: (lastNameTxtField.text?.capitalized)!, dateOfBirth: dateOfBirthTextField.text!, phoneNumbers: userDataArray[0]!, emails: userDataArray[1]!, addresses: userDataArray[2]!,fields: fieldsArray, profileImage: profileImg.image!, isFavoritePerson: isFavorite) { (complete) in
+                saveProfile(firstName: (firstNameTxtField.text?.capitalized)!, lastName: (lastNameTxtField.text?.capitalized)!, dateOfBirth: dateOfBirthTextField.text!, phoneNumbers: userDataArray[0]!, emails: userDataArray[1]!, addresses: userDataArray[2]!,fields: fieldList, profileImage: profileImg.image!, isFavoritePerson: isFavorite) { (complete) in
                     
                     if complete {
                         guard let contactsVC = storyboard?.instantiateViewController(withIdentifier: "ContactsVC") else { return }
@@ -193,7 +203,7 @@ class ProfileVC: UIViewController {
             
             if firstNameTxtField.text != "" && lastNameTxtField.text != "" && dateOfBirthTextField.text != "" && (userDataArray[0]?.count)! >= 0 && (userDataArray[1]?.count)! >= 0 {
             
-                modifyProfileInfo(searchFirstName: firstNameString, searchLastName: lastNameString, searchDateOfBirth: dateOfBirthString, newFirstName: firstNameTxtField.text!, newLastName: lastNameTxtField.text!, newDateOfBirth: dateOfBirthTextField.text!, newProfileImage: profileImg.image!, newPhonenumbers: userDataArray[0]!, newEmails: userDataArray[1]!, newAddresses: userDataArray[2]!, newIsFavoritePerson: isFavoriteBool ,fields: fieldsArray) { (complete) in
+                modifyProfileInfo(searchFirstName: firstNameString, searchLastName: lastNameString, searchDateOfBirth: dateOfBirthString, newFirstName: firstNameTxtField.text!, newLastName: lastNameTxtField.text!, newDateOfBirth: dateOfBirthTextField.text!, newProfileImage: profileImg.image!, newPhonenumbers: userDataArray[0]!, newEmails: userDataArray[1]!, newAddresses: userDataArray[2]!, newIsFavoritePerson: isFavoriteBool ,fields: fieldList) { (complete) in
                 
                     if complete {
                         guard let contactsVC = storyboard?.instantiateViewController(withIdentifier: "ContactsVC") else { return }
@@ -320,30 +330,40 @@ class ProfileVC: UIViewController {
     
     //MARK: VC Functions -----------------------------------------------------------------------------
     
-    func initProfileView(firstName: String = "", lastName: String = "", dateOfBirth: String = "", profileImage: UIImage = UIImage(named: "personPlaceholder")!, phoneNumbers: [String] = [], emails: [String] = [], addresses: [String] = [],fields: [String] = [], profileType: ProfileTypeEnum, isFavorite: IsFavoriteEnum = .no) {
+    func initProfileView(firstName: String = "", lastName: String = "", dateOfBirth: String = "", profileImage: UIImage = UIImage(named: "personPlaceholder")!, phoneNumbers: [String] = [], emails: [String] = [], addresses: [String] = [],fields: String = "", profileType: ProfileTypeEnum, isFavorite: IsFavoriteEnum = .no) {
         isEditable = false
 //        addBtn.isHidden = true
         userDataArray[0] = phoneNumbers
         userDataArray[1] = emails
         userDataArray[2] = addresses
-        userDataArray[3] = fields
-        fieldsArray = fields
+      //  userDataArray[3] = fields
+        do{
+            print(fields)
+            let fieldLi = FieldList(JSONString: fields)
+            print(fieldLi)
+            //pFieldList = (fieldLi?.fields!)!
+        }catch let error{
+         print(error)
+        }
         
-        for item in fieldsArray {
-           let somedata = Data(item.utf8)
-           let jsonDecoder = JSONDecoder()
-            do{
-                print(somedata)
-                    let field = try jsonDecoder.decode(FieldModel.self, from: somedata)
-                fieldList.append(field)
-            }catch let jsonErr {
-                print(jsonErr)
+     
+        
+      //  print(fields)
+      //  print("All Fields :" + (PreferenceUtil.getAllFields().toJSONString())!)
+
+        for item in pFieldList {
+            for mItem in fieldList{
+                if(item.fieldName == mItem.fieldName){
+                    mItem.fieldValue = item.fieldValue
+                }
             }
          
-        }
+    }
+        print(fieldList.toJSON())
+       // fieldtableView.reloadData()
     
        
-        if(fieldList.count != 0){
+   //     if(fieldList.count != 0){
 //            self.fieldtableView.reloadData()
 //            for item in fieldList{
 //                      yPos += 22
@@ -355,7 +375,7 @@ class ProfileVC: UIViewController {
 //                      tf.backgroundColor = UIColor.black
 //                    //  self.stackview.addSubview(tf)
 //                  }
-        }
+//        }
       //  print("List Size" + "\(fieldList[0].fieldName)")
         
         //  let jsonDecoder = JSONDecoder()
@@ -466,7 +486,9 @@ class ProfileVC: UIViewController {
     
     private func appendUserData(text: String, section: Int) {
         
-        fieldsArray.append(text)
+     //   fieldsArray.append(text)
+        fieldList = PreferenceUtil.getAllFields().fields!
+        fieldtableView.reloadData()
         if var array = userDataArray[section] {
             array.append(text)
             userDataArray[section] = array
@@ -476,7 +498,7 @@ class ProfileVC: UIViewController {
         do{
             let somedata = Data(text.utf8)
             let jsonDecoder = JSONDecoder()
-          let field = try jsonDecoder.decode(FieldModel.self, from: somedata)
+            let field = try jsonDecoder.decode(FieldModel.self, from: somedata)
 //                               yPos += 22
 //                               let tf = CustomTextField()
 //                               tf.text = field.fieldValue
@@ -606,7 +628,7 @@ extension ProfileVC {
 
 extension ProfileVC {
     
-    private func saveProfile(firstName: String, lastName: String, dateOfBirth: String, phoneNumbers: [String], emails: [String], addresses: [String],fields: [String], profileImage: UIImage, isFavoritePerson: IsFavoriteEnum, completion: (_ complete: Bool) -> ()) {
+    private func saveProfile(firstName: String, lastName: String, dateOfBirth: String, phoneNumbers: [String], emails: [String], addresses: [String],fields: [FieldModel], profileImage: UIImage, isFavoritePerson: IsFavoriteEnum, completion: (_ complete: Bool) -> ()) {
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
         
         let managedContext = appDelegate.persistentContainer.viewContext
@@ -621,7 +643,7 @@ extension ProfileVC {
         } else if isFavoritePerson == .yes {
             isFavoriteBool = true
         }
-        
+        let fieldsString =  fields.toJSONString() as! String
         person.firstName = firstName.removeWhiteSpaces()
         person.lastName = lastName.removeWhiteSpaces()
         person.dateOfBirth = dateOfBirth
@@ -629,7 +651,7 @@ extension ProfileVC {
       //person.phoneNumbers = phoneNumbers as NSObject
       //person.emails = emails as NSObject
       //person.addresses = addresses as NSObject
-        person.fields = fields as NSObject
+        person.fields = fieldsString
         person.isFavorite = isFavoriteBool
         
         do {
@@ -642,7 +664,7 @@ extension ProfileVC {
         }
     }
     
-    private func modifyProfileInfo(searchFirstName: String, searchLastName: String, searchDateOfBirth: String, newFirstName: String, newLastName: String, newDateOfBirth: String, newProfileImage: UIImage, newPhonenumbers: [String], newEmails: [String], newAddresses: [String], newIsFavoritePerson: Bool,fields: [String],  completion: (_ complete: Bool) -> ()) {
+    private func modifyProfileInfo(searchFirstName: String, searchLastName: String, searchDateOfBirth: String, newFirstName: String, newLastName: String, newDateOfBirth: String, newProfileImage: UIImage, newPhonenumbers: [String], newEmails: [String], newAddresses: [String], newIsFavoritePerson: Bool,fields: [FieldModel],  completion: (_ complete: Bool) -> ()) {
         
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
         let managedContext = appDelegate.persistentContainer.viewContext
@@ -652,7 +674,7 @@ extension ProfileVC {
         do {
             
             let results = try managedContext.fetch(request)
-            
+            let fieldString = fields.toJSONString()!
             if results.count > 0 {
                 for result in results as [NSManagedObject] {
                     if let firstName = result.value(forKey: "firstName") as? String, let lastName = result.value(forKey: "lastName") as? String, let dateOfBirth = result.value(forKey: "dateOfBirth") as? String {
@@ -667,7 +689,7 @@ extension ProfileVC {
                             result.setValue(newPhonenumbers, forKey: "phoneNumbers")
                             result.setValue(newEmails, forKey: "emails")
                             result.setValue(newAddresses, forKey: "addresses")
-                            result.setValue(fields, forKey: "fields")
+                            result.setValue(fieldString, forKey: "fields")
                             result.setValue(newIsFavoritePerson, forKey: "isFavorite")
                             
                             do {
@@ -712,20 +734,8 @@ extension ProfileVC: UITextFieldDelegate {
 //MARK: TableView ------------------------------------------------------------------------------
 extension ProfileVC : TextFieldChangeDeleget {
     func fieldTableCell(index : Int, didChange text: String) {
-        do{
-                let somedata = Data(fieldsArray[index].utf8)
-                let jsonDecoder = JSONDecoder()
-                let field = try jsonDecoder.decode(FieldModel.self, from: somedata)
-                field.fieldValue = text
-                let jsonEncoder = JSONEncoder()
-                let jsonData = try jsonEncoder.encode(field)
-                let json = String(data: jsonData, encoding: String.Encoding.utf8)
-                fieldsArray[index] = json!
-                } catch let jsError{
-                print(jsError)
-                }
-        
-        
+        fieldList[index].fieldValue = text
+
     }
     
     
@@ -744,8 +754,8 @@ extension ProfileVC: UITableViewDelegate, UITableViewDataSource{
     
   func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
     //    return userDataArray[3]!.count
-    return fieldsArray.count
-     }
+    return fieldList.count
+    }
      
      func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
          let cell = fieldtableView.dequeueReusableCell(withIdentifier: "FieldTableViewCell") as! FieldTableViewCell
@@ -753,40 +763,29 @@ extension ProfileVC: UITableViewDelegate, UITableViewDataSource{
          cell.textFieldChangeDeleget = self
          cell.removeFieldDeleget = self
         if(!isEditable){
-           if(fieldsArray != nil){
-                      do{
-                                         let somedata = Data(fieldsArray[indexPath.row].utf8)
-                                         let jsonDecoder = JSONDecoder()
-                                         let field = try jsonDecoder.decode(FieldModel.self, from: somedata)
-                                         cell.fieldName.text =  field.fieldName
-                                         cell.fieldtext.text = field.fieldValue
+            if(fieldList != nil){
+                  
+                cell.fieldName.text =  fieldList[indexPath.row].fieldName
+                cell.fieldtext.text = fieldList[indexPath.row].fieldValue
                         cell.fieldtext.isUserInteractionEnabled = false
                         cell.removeButton.isHidden = true
 
-                          } catch let jsError{
-                                         print(jsError)
-                          }
-                       }
-                       return cell
+                        
+                }
+            return cell
         }
         else{
             cell.index = indexPath.row
                               cell.textFieldChangeDeleget = self
-                              if(fieldsArray != nil){
-                                 
-                                  do{
-                                                    let somedata = Data(fieldsArray[indexPath.row].utf8)
-                                                    let jsonDecoder = JSONDecoder()
-                                                    let field = try jsonDecoder.decode(FieldModel.self, from: somedata)
-                                                    cell.fieldName.text =  field.fieldName
-                                     cell.fieldtext.isUserInteractionEnabled = true
-                                     cell.removeButton.isHidden = false
-                                                    cell.fieldtext.text = field.fieldValue
+            if(fieldList != nil){
+                                             
+                cell.fieldName.text =  fieldList[indexPath.row].fieldName
+                cell.fieldtext.text = fieldList[indexPath.row].fieldValue
+                                                   cell.fieldtext.isUserInteractionEnabled = true
+                                                   cell.removeButton.isHidden = true
 
-                                     } catch let jsError{
-                                                    print(jsError)
-                                     }
-                                  }
+                                                   
+                                           }
                                   return cell
         }
        

@@ -2,7 +2,7 @@
 //  Person+CoreDataClass.swift
 //  
 //
-//  Created by Noban Aits on 3/3/20.
+//  Created by Noban Aits on 4/3/20.
 //
 //
 

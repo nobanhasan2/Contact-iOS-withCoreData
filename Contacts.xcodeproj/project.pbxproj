@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		52DA79C0E3A347B915DB8EEB /* Pods_Contacts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7DA715FC105ED13A55ED854D /* Pods_Contacts.framework */; };
 		9083B3F3240795650000F867 /* FieldTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9083B3F2240795650000F867 /* FieldTableViewCell.swift */; };
+		908CF470240F6842002BAB2D /* PreferenceUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 908CF46F240F6842002BAB2D /* PreferenceUtil.swift */; };
 		908D9C9524023FD70060174A /* CustomFieldTextFieldBulletinItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 908D9C9424023FD70060174A /* CustomFieldTextFieldBulletinItem.swift */; };
 		9091B6C6240388BF004A3C58 /* FieldsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9091B6C5240388BF004A3C58 /* FieldsModel.swift */; };
 		90A7AF42240297AC00B7BAA8 /* ExportViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90A7AF41240297AC00B7BAA8 /* ExportViewController.swift */; };
@@ -61,6 +62,7 @@
 		31D2E602750EE12B5F71E140 /* Pods-Contacts.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Contacts.release.xcconfig"; path = "Pods/Target Support Files/Pods-Contacts/Pods-Contacts.release.xcconfig"; sourceTree = "<group>"; };
 		7DA715FC105ED13A55ED854D /* Pods_Contacts.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Contacts.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		9083B3F2240795650000F867 /* FieldTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FieldTableViewCell.swift; sourceTree = "<group>"; };
+		908CF46F240F6842002BAB2D /* PreferenceUtil.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreferenceUtil.swift; sourceTree = "<group>"; };
 		908D9C9424023FD70060174A /* CustomFieldTextFieldBulletinItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomFieldTextFieldBulletinItem.swift; sourceTree = "<group>"; };
 		9091B6C5240388BF004A3C58 /* FieldsModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FieldsModel.swift; sourceTree = "<group>"; };
 		90A7AF41240297AC00B7BAA8 /* ExportViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExportViewController.swift; sourceTree = "<group>"; };
@@ -273,6 +275,7 @@
 				FEA6A3DC21C9A1F6006410C7 /* AppDelegate.swift */,
 				FEA6A3EB21C9A1F9006410C7 /* Info.plist */,
 				FEA6A3E321C9A1F6006410C7 /* Contacts.xcdatamodeld */,
+				908CF46F240F6842002BAB2D /* PreferenceUtil.swift */,
 			);
 			path = Contacts;
 			sourceTree = "<group>";
@@ -452,6 +455,7 @@
 				FE57A5DD21CEE83100F22572 /* CustomButton.swift in Sources */,
 				9091B6C6240388BF004A3C58 /* FieldsModel.swift in Sources */,
 				FEA6A3E521C9A1F6006410C7 /* Contacts.xcdatamodeld in Sources */,
+				908CF470240F6842002BAB2D /* PreferenceUtil.swift in Sources */,
 				FEF9882B21D11EB40095F28A /* IsFavoriteEnum.swift in Sources */,
 				FE17704B21D4036E00F7F0BE /* PhoneTextFieldBulletinItem.swift in Sources */,
 				FE57A5E121CEEA8B00F22572 /* CustomUIViewTopRounded.swift in Sources */,

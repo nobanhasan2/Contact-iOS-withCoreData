@@ -1,22 +1,36 @@
 PODS:
+  - Alamofire (4.9.1)
+  - AlamofireObjectMapper (5.2.1):
+    - Alamofire (~> 4.7)
+    - ObjectMapper (~> 3.4)
   - BulletinBoard (4.1.0)
+  - ObjectMapper (3.5.1)
   - SwiftMessages (7.0.1):
     - SwiftMessages/App (= 7.0.1)
   - SwiftMessages/App (7.0.1)
 
 DEPENDENCIES:
+  - Alamofire (~> 4.7)
+  - AlamofireObjectMapper (~> 5.2)
   - BulletinBoard
+  - ObjectMapper
   - SwiftMessages
 
 SPEC REPOS:
   trunk:
+    - Alamofire
+    - AlamofireObjectMapper
     - BulletinBoard
+    - ObjectMapper
     - SwiftMessages
 
 SPEC CHECKSUMS:
+  Alamofire: 85e8a02c69d6020a0d734f6054870d7ecb75cf18
+  AlamofireObjectMapper: 1989f690e982b71921b9253f53a4f33a9bc00d88
   BulletinBoard: c774340545b5cfd05a96a89f63b105ecc95c86f9
+  ObjectMapper: 70187b8941977c62ccfb423caf6b50be405cabf0
   SwiftMessages: b577dc7043be8b299857ab35bb663dbff6483bd0
 
-PODFILE CHECKSUM: ddfb8a0b4e8662ac46b602cd971674141861536c
+PODFILE CHECKSUM: 7dec616be61ff7e3aaa5106f09f8d5db0f447a2c
 
 COCOAPODS: 1.8.4

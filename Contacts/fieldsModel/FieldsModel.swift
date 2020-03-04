@@ -7,14 +7,33 @@
 //
 
 import Foundation
+import ObjectMapper
 
-
-class FieldModel : Codable {
+class FieldModel : Mappable ,Codable{
     var fieldName : String?
     var fieldValue : String?
+    required init?(map: Map) {
+        
+    }
     
+    func mapping(map: Map) {
+        fieldName <- map["fieldName"]
+        fieldValue <- map["fieldValue"]
+    }
     init(name: String , value: String){
         self.fieldName = name
         self.fieldValue = value
+    }
+}
+class FieldList : Mappable,Codable{
+    var fields : [FieldModel]? = []
+    required init?(map: Map) {
+        
+    }
+    func mapping(map: Map) {
+        fields <- map["fields"]
+    }
+    init(){
+        
     }
 }

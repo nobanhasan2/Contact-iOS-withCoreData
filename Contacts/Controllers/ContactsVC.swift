@@ -412,7 +412,7 @@ extension ContactsVC: UITableViewDataSource, UITableViewDelegate {
         var phoneNumbers = NSObject()
         var emails = NSObject()
         var addresses = NSObject()
-        var fields = NSObject()
+        var fields = String()
         var contactImage = UIImage()
         var favorite = Bool()
         
@@ -442,17 +442,17 @@ extension ContactsVC: UITableViewDataSource, UITableViewDelegate {
             phoneNumbers = filteredPersonArray[rowNumber].phoneNumbers!
             emails = filteredPersonArray[rowNumber].emails!
             addresses = filteredPersonArray[rowNumber].addresses!
-            fields = filteredPersonArray[rowNumber].fields!
+            fields = filteredPersonArray[rowNumber].fields! as! String
             contactImage = contactImagesDictionary[fullName]!
             favorite = contactFavoritesDictionary[fullName]!
         } else {
             firstName = personArray[rowNumber].firstName!
             lastName = personArray[rowNumber].lastName!
             dateOfBirth = personArray[rowNumber].dateOfBirth!
-//            phoneNumbers = personArray[rowNumber].phoneNumbers!
-  //          emails = personArray[rowNumber].emails!
+   //            phoneNumbers = personArray[rowNumber].phoneNumbers!
+   //          emails = personArray[rowNumber].emails!
    //         addresses = personArray[rowNumber].addresses!
-            fields = personArray[rowNumber].fields!
+            fields = personArray[rowNumber].fields! as! String
             contactImage = contactImagesDictionary[fullName]!
             favorite = contactFavoritesDictionary[fullName]!
         }
@@ -464,7 +464,7 @@ extension ContactsVC: UITableViewDataSource, UITableViewDelegate {
         }
         
         let profileVC = self.storyboard?.instantiateViewController(withIdentifier: "ProfileVC") as! ProfileVC
-        profileVC.initProfileView(firstName: firstName, lastName: lastName, dateOfBirth: dateOfBirth, profileImage: contactImage,fields: fields as! [String], profileType: .view, isFavorite: isFavorite)
+        profileVC.initProfileView(firstName: firstName, lastName: lastName, dateOfBirth: dateOfBirth, profileImage: contactImage,fields: fields , profileType: .view, isFavorite: isFavorite)
         
         present(profileVC, animated: true, completion: nil)
     }
