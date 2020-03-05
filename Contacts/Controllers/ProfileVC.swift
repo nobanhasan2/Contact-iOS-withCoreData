@@ -1,7 +1,6 @@
 //
 //  CreateContactVC.swift
 //  Contacts
-//
 //  Created by Johnny Perdomo on 12/19/18.
 //  Copyright © 2018 Johnny Perdomo. All rights reserved.
 //
@@ -46,6 +45,7 @@ class ProfileVC: UIViewController {
     private var fieldList = [FieldModel]()
     private var pFieldList = [FieldModel]()
     private var isEditable : Bool = false
+    private var strField : String? = ""
     
     
   //  private var phoneNumberArray = [String]()
@@ -72,7 +72,7 @@ class ProfileVC: UIViewController {
        
         fieldtableView.delegate = self
         fieldtableView.dataSource = self
-        fieldList = PreferenceUtil.getAllFields().fields!
+      //  fieldList = PreferenceUtil.getAllFields().fields!
        
         setupProfileVC()
     }
@@ -337,11 +337,28 @@ class ProfileVC: UIViewController {
         userDataArray[1] = emails
         userDataArray[2] = addresses
       //  userDataArray[3] = fields
+       // print("init"+fields)
+        fieldList = PreferenceUtil.getAllFields().fields!
         do{
-            print(fields)
-            let fieldLi = FieldList(JSONString: fields)
-            print(fieldLi)
-            //pFieldList = (fieldLi?.fields!)!
+           
+          //  let fieldLi  = FieldList(JSONString: fields)
+         
+            let somedata = Data(fields.utf8)
+            let jsonDecoder = JSONDecoder()
+            let field = try jsonDecoder.decode([FieldModel].self, from: somedata)
+            print(field)
+            print(field.count)
+            pFieldList = field
+            strField = fields
+            for (index,item) in pFieldList.enumerated() {
+                  for (index2,mItem) in fieldList.enumerated(){
+                      if(item.fieldName == mItem.fieldName){
+                          fieldList[index2].fieldValue = item.fieldValue
+                      }
+                  }
+
+                }
+             
         }catch let error{
          print(error)
         }
@@ -351,16 +368,8 @@ class ProfileVC: UIViewController {
       //  print(fields)
       //  print("All Fields :" + (PreferenceUtil.getAllFields().toJSONString())!)
 
-        for item in pFieldList {
-            for mItem in fieldList{
-                if(item.fieldName == mItem.fieldName){
-                    mItem.fieldValue = item.fieldValue
-                }
-            }
-         
-    }
-        print(fieldList.toJSON())
-       // fieldtableView.reloadData()
+        
+//        print(fieldList[1].fieldValue)
     
        
    //     if(fieldList.count != 0){
@@ -495,24 +504,30 @@ class ProfileVC: UIViewController {
         } else {
             userDataArray[section] = [text]
         }
-        do{
-            let somedata = Data(text.utf8)
-            let jsonDecoder = JSONDecoder()
-            let field = try jsonDecoder.decode(FieldModel.self, from: somedata)
-//                               yPos += 22
-//                               let tf = CustomTextField()
-//                               tf.text = field.fieldValue
-//                               tf.textColor = UIColor.black
-//            tf.borderStyle = UITextField.BorderStyle.line
-//                               tf.frame = CGRect(x: xPos, y: yPos, width: 200, height: 20)
-//
-//                               tf.backgroundColor = UIColor.white
-                             //  self.stackview.addSubview(tf)
-            
-        } catch let jsError{
-            print(jsError)
-        }
+   
          fieldtableView.reloadData()
+        do{
+                
+               //  let fieldLi  = FieldList(JSONString: fields)
+              
+            let somedata = Data(strField!.utf8)
+                 let jsonDecoder = JSONDecoder()
+                 let field = try jsonDecoder.decode([FieldModel].self, from: somedata)
+                 print(field)
+                 print(field.count)
+                 pFieldList = field
+                 for (index,item) in pFieldList.enumerated() {
+                       for (index2,mItem) in fieldList.enumerated(){
+                           if(item.fieldName == mItem.fieldName){
+                               fieldList[index2].fieldValue = item.fieldValue
+                           }
+                       }
+
+                     }
+                  
+             }catch let error{
+              print(error)
+             }
         print("Reload calling")
 //        profileTableView.reloadData()
     }
@@ -741,9 +756,35 @@ extension ProfileVC : TextFieldChangeDeleget {
     
 }
 extension ProfileVC : RemoveFieldDeleget{
-    func removeField(index: Int) {
-        fieldsArray.remove(at: index)
+   
+    func removeField(name: String) {
+        PreferenceUtil.removeField(name : name)
+        
+        fieldList = PreferenceUtil.getAllFields().fields!
+        
         fieldtableView.reloadData()
+        do{
+                      
+                     //  let fieldLi  = FieldList(JSONString: fields)
+                    
+                  let somedata = Data(strField!.utf8)
+                       let jsonDecoder = JSONDecoder()
+                       let field = try jsonDecoder.decode([FieldModel].self, from: somedata)
+                       print(field)
+                       print(field.count)
+                       pFieldList = field
+                       for (index,item) in pFieldList.enumerated() {
+                             for (index2,mItem) in fieldList.enumerated(){
+                                 if(item.fieldName == mItem.fieldName){
+                                     fieldList[index2].fieldValue = item.fieldValue
+                                 }
+                             }
+
+                           }
+                        
+                   }catch let error{
+                    print(error)
+                   }
     }
     
     
@@ -767,8 +808,8 @@ extension ProfileVC: UITableViewDelegate, UITableViewDataSource{
                   
                 cell.fieldName.text =  fieldList[indexPath.row].fieldName
                 cell.fieldtext.text = fieldList[indexPath.row].fieldValue
-                        cell.fieldtext.isUserInteractionEnabled = false
-                        cell.removeButton.isHidden = true
+                cell.fieldtext.isUserInteractionEnabled = false
+                cell.removeButton.isHidden = true
 
                         
                 }
@@ -781,12 +822,12 @@ extension ProfileVC: UITableViewDelegate, UITableViewDataSource{
                                              
                 cell.fieldName.text =  fieldList[indexPath.row].fieldName
                 cell.fieldtext.text = fieldList[indexPath.row].fieldValue
-                                                   cell.fieldtext.isUserInteractionEnabled = true
-                                                   cell.removeButton.isHidden = true
+                cell.fieldtext.isUserInteractionEnabled = true
+                cell.removeButton.isHidden = false
 
                                                    
-                                           }
-                                  return cell
+                }
+                 return cell
         }
        
          

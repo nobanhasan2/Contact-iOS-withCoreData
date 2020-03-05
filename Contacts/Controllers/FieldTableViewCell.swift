@@ -11,7 +11,7 @@ protocol TextFieldChangeDeleget {
     func fieldTableCell( index: Int,didChange text: String)
 }
 protocol RemoveFieldDeleget {
-    func removeField( index: Int)
+    func removeField( name: String)
 }
 class FieldTableViewCell: UITableViewCell {
 
@@ -23,7 +23,7 @@ class FieldTableViewCell: UITableViewCell {
    
    
     @IBAction func onTapRemove(_ sender: Any) {
-        removeFieldDeleget?.removeField(index: index!)
+        removeFieldDeleget?.removeField(name : fieldName.text!)
     }
     
     

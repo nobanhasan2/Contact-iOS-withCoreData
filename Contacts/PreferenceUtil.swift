@@ -21,7 +21,7 @@ class PreferenceUtil{
     
     class func addNewFields(field : FieldModel){
             let defaults = UserDefaults.standard
-            let allFields = getAllFields()
+        var allFields = getAllFields()
             print(field.fieldName)
         
             allFields.fields?.append(field)
@@ -40,7 +40,7 @@ class PreferenceUtil{
                 let allFields = FieldList(JSONString: allFieldJSON)
                 return allFields!
               } else{
-                let Allfields = FieldList()
+            var Allfields = FieldList()
                 Allfields.fields = [FieldModel]()
                 return Allfields
                 
@@ -59,19 +59,21 @@ class PreferenceUtil{
               return false
         
     }
-    
-    class func saveEmail(email : String){
+    class func removeField(name : String){
         let defaults = UserDefaults.standard
-               defaults.set(email, forKey: PREF_EMAIL)
+        var allFields = getAllFields()
+        for i in 0..<(allFields.fields?.count ?? 0){
+                    if name == allFields.fields![i].fieldName{
+                      //  cartProducts.products?.remove(at: i)
+                        allFields.fields?.remove(at: i)
+                        break
+                    }
+                }
+        let fieldJson = Mapper().toJSONString(allFields)
+        defaults.set(fieldJson, forKey: PREF_FIELD)
+    
     }
-    class func getEmail() -> String? {
-            let defaults = UserDefaults.standard
-            if defaults.value(forKey: PREF_EMAIL) != nil{
-                return defaults.value(forKey: PREF_EMAIL) as! String
-            }else{
-                return ""
-            }
-        }
+    
     
 
 
